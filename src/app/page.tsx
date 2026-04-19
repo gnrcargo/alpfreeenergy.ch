@@ -33,7 +33,7 @@ export default function Home() {
 
       <nav className="navbar">
         <div className="container nav-container">
-          <div className="nav-brand">
+          <div className="nav-brand text-gradient">
             AlpFree<span>Energy</span>
           </div>
           <ul className="nav-links">
