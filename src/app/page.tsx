@@ -33,8 +33,8 @@ export default function Home() {
 
       <nav className="navbar">
         <div className="container nav-container">
-          <div className="nav-brand text-gradient">
-            AlpFree<span>Energy</span>
+          <div className="nav-brand">
+            <img src="/alpfree_logo_mix.png" alt="AlpFree Energy Logo" style={{ height: '45px', width: 'auto', objectFit: 'contain', verticalAlign: 'middle' }} />
           </div>
           <ul className="nav-links">
             <li><a href="#home">Home</a></li>
