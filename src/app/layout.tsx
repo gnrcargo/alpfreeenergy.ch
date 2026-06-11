@@ -14,9 +14,13 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "AlpFree Energy | Soluzioni Solari Premium e Indipendenza Energetica",
-  description: "Trasforma la tua energia con AlpFree Energy. Impianti fotovoltaici di alta gamma, sistemi di accumulo e consulenza strategica curata da Guner.",
-  keywords: ["energia solare svizzera", "fotovoltaico lugano", "pannelli solari premium", "indipendenza energetica", "AlpFree Energy", "Guner solare"],
+  title: "AlpFree Energy | Installazione Fotovoltaico Lugano e Canton Ticino",
+  description: "AlpFree Energy installa impianti fotovoltaici premium a Lugano e in tutto il Canton Ticino. Chalet, ville, abitazioni. Preventivo gratuito. Guner +41 78 657 10 66.",
+  keywords: [
+    "installazione fotovoltaico Ticino", "pannelli solari Lugano", "impianto solare Ticino",
+    "fotovoltaico chalet Ticino", "energia solare Lugano", "installatore solare Ticino",
+    "sussidi fotovoltaico Ticino 2026", "Pronovo contributi Ticino", "AlpFree Energy"
+  ],
   alternates: {
     canonical: "https://alpfreeenergy.ch",
   },
