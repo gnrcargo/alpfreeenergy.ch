@@ -163,7 +163,7 @@ export default function Home() {
             <li><a href="#home">Home</a></li>
             <li><a href="#soluzioni">Soluzioni</a></li>
             <li><a href="#chalet">Chalet Asset</a></li>
-            <li><a href="#faq">FAQ</a></li>
+            <li><a href="/faq">FAQ</a></li>
             <li><a href="#contatti">Contatti</a></li>
           </ul>
           <div>
@@ -409,7 +409,7 @@ export default function Home() {
                   <li><a href="#home">Home</a></li>
                   <li><a href="#soluzioni">Soluzioni</a></li>
                   <li><a href="#chalet">Chalet come Asset</a></li>
-                  <li><a href="#faq">FAQ</a></li>
+                  <li><a href="/faq">FAQ</a></li>
                 </ul>
               </div>
               <div className="footer-column">
