@@ -9,7 +9,7 @@ const localBusinessJsonLd = {
   "image": "https://alpfreeenergy.ch/alpfree_logo_mix.png",
   "url": "https://alpfreeenergy.ch",
   "telephone": "+41786571066",
-  "priceRange": "CHF 18.000 - CHF 80.000",
+  "priceRange": "Da CHF 1.000",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Via Cantonale",
@@ -102,7 +102,39 @@ const faqJsonLd = {
       "name": "Conviene installare il solare su un chalet di vacanza in Ticino?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Assolutamente sì. Un chalet con impianto fotovoltaico produce reddito energetico anche quando è vuoto, immette energia in rete e ottiene una remunerazione. Aumenta inoltre il valore commerciale dell'immobile del 10-15% e migliora la classe energetica. Per i proprietari che risiedono fuori dal Ticino è uno dei migliori investimenti per il loro immobile alpino."
+        "text": "Assolutamente sì. Un chalet con impianto fotovoltaico produce reddito energetico anche quando è vuoto, immette energia in rete e ottiene una remunerazione. Aumenta inoltre il valore commerciale dell'immobile del 10-15% e migliora la classe energetica. Per i proprietari che risiedono fuori dal Ticino è uno degli investimenti più solidi per il loro immobile alpino."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quanti pannelli solari servono per uno chalet di montagna usato nei weekend?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Per uno chalet alpino usato nei weekend bastano 2-4 pannelli da 400W (0,8-1,6 kWp totali). In Ticino, con circa 1.200 kWh di produzione per kWp all'anno, un impianto da 1,2 kWp produce circa 1.440 kWh/anno — sufficiente per coprire frigo, luce e TV durante i weekend. AlpFree Energy parte da impianti completi installati da CHF 1.000 a CHF 6.000, tutto incluso."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quanto consuma un frigorifero sempre acceso in uno chalet di montagna?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Un frigorifero A++ da 200-300 litri consuma circa 0,3-0,5 kWh al giorno, ovvero 100-180 kWh all'anno. In uno chalet vuoto 300 giorni l'anno, è energia che paghi anche quando non ci sei. Con un piccolo impianto solare da 1 kWp e una batteria gel da CHF 400, il frigorifero può funzionare gratuitamente nei mesi da aprile a ottobre in Ticino."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quante batterie servono per alimentare luce, TV e frigorifero per un weekend in uno chalet?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Per un weekend di 3 giorni con frigo + luce + TV il consumo totale è circa 9-12 kWh. Servono 2-3 batterie gel da CHF 400 ciascuna (circa 12-15 kWh di capacità installata). Per iniziare, anche una sola batteria gel copre le notti e i momenti senza sole. AlpFree Energy dimensiona il sistema in base all'uso reale del tuo chalet."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quanto costa un piccolo impianto solare per uno chalet in Ticino?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Un piccolo impianto solare installato e funzionante per uno chalet alpino in Ticino parte da CHF 1.000 e arriva fino a CHF 6.000, tutto incluso: pannelli (circa CHF 100 ciascuno), inverter (circa CHF 500) e batteria gel (circa CHF 400). Il costo finale dipende da manodopera, tipo di tetto, accessibilità e complessità dell'installazione. AlpFree Energy offre un sopralluogo gratuito per calcolare il preventivo esatto per la tua situazione."
       }
     }
   ]
@@ -125,7 +157,7 @@ export default function Home() {
       <nav className="navbar">
         <div className="container nav-container">
           <div className="nav-brand">
-            <img src="/alpfree_logo_mix.png" alt="AlpFree Energy Logo" style={{ height: '45px', width: 'auto', objectFit: 'contain', verticalAlign: 'middle' }} />
+            <img src="/alpfree_logo_new.png" alt="AlpFree Energy Logo" style={{ height: '45px', width: 'auto', objectFit: 'contain', verticalAlign: 'middle' }} />
           </div>
           <ul className="nav-links">
             <li><a href="#home">Home</a></li>
@@ -321,6 +353,41 @@ export default function Home() {
                     immette energia nella rete e riceve una remunerazione. Aumenta il valore dell&apos;immobile
                     del 10–15% e migliora la classe energetica. Per i proprietari residenti fuori dal Ticino
                     è uno degli investimenti più solidi per il loro immobile alpino.
+                  </p>
+                </div>
+
+                <div className="glass-panel" style={{ padding: '2rem' }}>
+                  <h3 style={{ fontSize: '1.1rem', marginBottom: '0.75rem', color: 'var(--primary-color)' }}>
+                    Quanti pannelli servono per uno chalet usato nei weekend?
+                  </h3>
+                  <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+                    Per uno chalet alpino usato nei weekend bastano <strong>2-4 pannelli da 400W</strong>.
+                    In Ticino, con circa 1.200 kWh di produzione per kWp all&apos;anno, coprono frigo, luce e TV
+                    per tutti i weekend. AlpFree Energy parte da impianti completi installati
+                    da <strong>CHF 1.000 a CHF 6.000</strong>, tutto incluso.
+                  </p>
+                </div>
+
+                <div className="glass-panel" style={{ padding: '2rem' }}>
+                  <h3 style={{ fontSize: '1.1rem', marginBottom: '0.75rem', color: 'var(--primary-color)' }}>
+                    Quanto consuma un frigorifero sempre acceso in uno chalet vuoto?
+                  </h3>
+                  <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+                    Un frigorifero A++ consuma circa <strong>0,3-0,5 kWh al giorno</strong> — energia che paghi
+                    anche quando non ci sei. Con un pannello solare e una batteria gel da CHF 400, il frigorifero
+                    del tuo chalet può funzionare gratuitamente da aprile a ottobre in Ticino.
+                  </p>
+                </div>
+
+                <div className="glass-panel" style={{ padding: '2rem' }}>
+                  <h3 style={{ fontSize: '1.1rem', marginBottom: '0.75rem', color: 'var(--primary-color)' }}>
+                    Quanto costa un piccolo impianto solare per uno chalet in Ticino?
+                  </h3>
+                  <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7 }}>
+                    Un impianto completo installato parte da <strong>CHF 1.000 fino a CHF 6.000</strong>:
+                    pannelli (~CHF 100 cad.), inverter (~CHF 500), batteria gel (~CHF 400).
+                    Il costo varia in base a tetto, accessibilità e complessità.
+                    AlpFree Energy offre un <strong>sopralluogo gratuito</strong> per il preventivo esatto.
                   </p>
                 </div>
 

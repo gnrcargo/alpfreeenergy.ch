@@ -56,7 +56,7 @@ export default function RootLayout({
     "@type": "Organization",
     "name": "AlpFree Energy",
     "url": "https://alpfreeenergy.ch",
-    "logo": "https://alpfreeenergy.ch/logo.png",
+    "logo": "https://alpfreeenergy.ch/alpfree_logo_new.png",
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+41-78-657-1066",
