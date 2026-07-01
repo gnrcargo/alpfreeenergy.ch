@@ -195,6 +195,7 @@ export default function FAQPage() {
             <li><a href="/">Home</a></li>
             <li><a href="/#soluzioni">Soluzioni</a></li>
             <li><a href="/#chalet">Chalet Asset</a></li>
+            <li><a href="/simulatore">Simulatore</a></li>
             <li><a href="/faq" style={{ color: "var(--primary-color)", fontWeight: 700 }}>FAQ</a></li>
             <li><a href="/#contatti">Contatti</a></li>
           </ul>
