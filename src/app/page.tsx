@@ -223,6 +223,23 @@ export default function Home() {
               </div>
 
             </div>
+
+            {/* Invito al simulatore — dimostrazione concreta della soluzione */}
+            <div style={{ maxWidth: "820px", margin: "3.5rem auto 0", background: "linear-gradient(135deg, #0f172a 0%, #1a2744 100%)", borderRadius: "16px", padding: "2.8rem 2.5rem", textAlign: "center", color: "white" }}>
+              <p style={{ color: "#ffb300", fontWeight: 600, letterSpacing: "2px", fontSize: "0.78rem", textTransform: "uppercase", marginBottom: "0.9rem" }}>
+                Provalo sulla tua casa o chalet
+              </p>
+              <h3 style={{ fontSize: "1.7rem", fontWeight: 800, color: "white", marginBottom: "0.9rem", lineHeight: 1.25 }}>
+                Ecco cosa possiamo fare per il tuo chalet
+              </h3>
+              <p style={{ color: "#94a3b8", fontSize: "1.02rem", maxWidth: "560px", margin: "0 auto 1.8rem", lineHeight: 1.7 }}>
+                Scopri in un tocco da cosa AlpFree ti rende indipendente: quanto costerebbe alimentare
+                la tua casa con la rete, un generatore diesel o a benzina — ogni anno.
+              </p>
+              <a href="/simulatore" className="btn btn-primary" style={{ fontSize: "1.02rem", padding: "0.95rem 2.3rem" }}>
+                Prova il simulatore
+              </a>
+            </div>
           </div>
         </section>
 
