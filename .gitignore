@@ -33,6 +33,13 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# lead salvati in locale (dati di contatto — non committare)
+leads.jsonl
+
+# materiale di lavoro interno (non pubblicare)
+/_shots
+IDENTITY.md
+
 # vercel
 .vercel
 

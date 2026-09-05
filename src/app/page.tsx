@@ -162,7 +162,7 @@ export default function Home() {
           <ul className="nav-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#soluzioni">Soluzioni</a></li>
-            <li><a href="#chalet">Chalet Asset</a></li>
+            <li><a href="/contracting">Contracting</a></li>
             <li><a href="/simulatore">Simulatore</a></li>
             <li><a href="/faq">FAQ</a></li>
             <li><a href="#contatti">Contatti</a></li>
@@ -224,19 +224,33 @@ export default function Home() {
 
             </div>
 
-            {/* Invito al simulatore — dimostrazione concreta della soluzione */}
+            {/* Invito al contracting — la soluzione di punta */}
             <div style={{ maxWidth: "820px", margin: "3.5rem auto 0", background: "linear-gradient(135deg, #0f172a 0%, #1a2744 100%)", borderRadius: "16px", padding: "2.8rem 2.5rem", textAlign: "center", color: "white" }}>
               <p style={{ color: "#ffb300", fontWeight: 600, letterSpacing: "2px", fontSize: "0.78rem", textTransform: "uppercase", marginBottom: "0.9rem" }}>
-                Provalo sulla tua casa o chalet
+                Novità — Contracting energetico
               </p>
               <h3 style={{ fontSize: "1.7rem", fontWeight: 800, color: "white", marginBottom: "0.9rem", lineHeight: 1.25 }}>
-                Ecco cosa possiamo fare per il tuo chalet
+                Un solo canone, zero investimento iniziale
               </h3>
-              <p style={{ color: "#94a3b8", fontSize: "1.02rem", maxWidth: "560px", margin: "0 auto 1.8rem", lineHeight: 1.7 }}>
-                Scopri in un tocco da cosa AlpFree ti rende indipendente: quanto costerebbe alimentare
+              <p style={{ color: "#94a3b8", fontSize: "1.02rem", maxWidth: "580px", margin: "0 auto 1.8rem", lineHeight: 1.7 }}>
+                AlpFree installa e possiede l&apos;impianto — pannelli, batteria, ricarica per l&apos;auto.
+                Tu paghi un canone al posto di bolletta e carburante. Calcola in un minuto quanto potrebbe essere.
+              </p>
+              <a href="/contracting" className="btn btn-primary" style={{ fontSize: "1.02rem", padding: "0.95rem 2.3rem" }}>
+                Calcola il tuo canone
+              </a>
+            </div>
+
+            {/* Invito al simulatore — dimostrazione concreta della soluzione */}
+            <div style={{ maxWidth: "820px", margin: "1.4rem auto 0", background: "#fff", border: "1px solid rgba(0,0,0,0.07)", borderRadius: "16px", padding: "2rem 2.5rem", textAlign: "center" }}>
+              <h3 style={{ fontSize: "1.3rem", fontWeight: 800, color: "var(--text-primary)", marginBottom: "0.6rem", lineHeight: 1.25 }}>
+                Preferisci acquistare l&apos;impianto?
+              </h3>
+              <p style={{ color: "var(--text-secondary)", fontSize: "0.98rem", maxWidth: "560px", margin: "0 auto 1.4rem", lineHeight: 1.7 }}>
+                Scopri da cosa AlpFree ti rende indipendente: quanto costerebbe alimentare
                 la tua casa con la rete, un generatore diesel o a benzina — ogni anno.
               </p>
-              <a href="/simulatore" className="btn btn-primary" style={{ fontSize: "1.02rem", padding: "0.95rem 2.3rem" }}>
+              <a href="/simulatore" className="btn btn-outline" style={{ fontSize: "1rem", padding: "0.8rem 2rem" }}>
                 Prova il simulatore
               </a>
             </div>
