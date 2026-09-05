@@ -64,6 +64,14 @@ export const AUTOMAZIONE = {
   prezzoChf: 800, // Raspberry Pi + Home Assistant + configurazione ponte AlpFree
 };
 
+// Termopompa aria-acqua installata (sostituisce gasolio/gas). Valori TIPICI TI
+// per una casa singola: tutti modificabili nello strumento offerta.
+export const TERMOPOMPA = {
+  prezzoChf: 22000, // impianto termopompa aria-acqua installato (una tantum)
+  kWhElettriciAnno: 5000, // consumo elettrico annuo stimato (fabbisogno termico / COP)
+  spesaFossileOggiChf: 3000, // spesa gasolio/gas che oggi il cliente sostiene per riscaldare
+};
+
 // --- EMS: abbonamento software (fasce dal doc pricing) -----------------------
 export type TierEms = {
   id: string;

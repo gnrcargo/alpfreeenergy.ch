@@ -10,7 +10,7 @@ import {
   type Tetto,
   type Immobile,
 } from "@/lib/calc";
-import { ENERGY, MOBILITY, CONTRACTING, kwhAnnoDefault } from "@/lib/catalog";
+import { ENERGY, MOBILITY, CONTRACTING, RISCALDAMENTO, kwhAnnoDefault } from "@/lib/catalog";
 
 const card = {
   background: "#fff",
@@ -51,6 +51,14 @@ export default function Calcolatore() {
     immobile: "primaria",
   });
 
+  // riscaldamento: la spesa fossile la catturiamo SOLO se il cliente passa alla
+  // termopompa (che installiamo noi). Chi scalda a legna/gasolio ma non la prende
+  // resta un'informazione utile (candidato da convincere), ma NON alza il canone.
+  //   "no" = non rilevante | "valuto" = sta valutando la termopompa
+  //   "fossile" = scalda a gasolio/gas (nessun effetto sul canone) | "gia" = la ha già
+  const [riscMode, setRiscMode] = useState<"no" | "valuto" | "fossile" | "gia">("no");
+  const [spesaRisc, setSpesaRisc] = useState(RISCALDAMENTO.spesaFossileDefaultChf);
+
   const [inviato, setInviato] = useState(false);
   const [invio, setInvio] = useState<"idle" | "corso" | "errore">("idle");
   const [contatto, setContatto] = useState({ nome: "", telefono: "", comune: "", fascia: "Mattina" });
@@ -58,7 +66,16 @@ export default function Calcolatore() {
   const set = <K extends keyof ContractingInput>(k: K, v: ContractingInput[K]) =>
     setI((prev) => ({ ...prev, [k]: v }));
 
-  const r = computeContracting(i);
+  // sia "sto valutando" sia "a gasolio/gas" contano la spesa di riscaldamento:
+  // serve a mostrare al cliente quanto spende DAVVERO oggi (il confronto col canone).
+  const riscConta = riscMode === "valuto" || riscMode === "fossile";
+  const inputCalcolo: ContractingInput = {
+    ...i,
+    speseRiscaldamentoOggi: riscConta ? spesaRisc : 0,
+    kWhRiscaldamento: riscConta ? RISCALDAMENTO.kWhElettriciDefault : 0,
+  };
+
+  const r = computeContracting(inputCalcolo);
   const giaElettrica = i.situazioneAuto === "gia_elettrica";
 
   async function inviaLead(e: React.FormEvent) {
@@ -68,7 +85,7 @@ export default function Calcolatore() {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ input: i, contatto }),
+        body: JSON.stringify({ input: inputCalcolo, contatto }),
       });
       if (!res.ok) throw new Error("bad");
       setInviato(true);
@@ -151,6 +168,51 @@ export default function Calcolatore() {
               </select>
             </div>
           </div>
+
+          {/* riscaldamento / termopompa — stesso schema dell'auto */}
+          <div style={{ marginTop: "1.3rem" }}>
+            <label style={label}>🔥 Riscaldamento</label>
+            <select
+              style={field}
+              value={riscMode}
+              onChange={(e) => {
+                const m = e.target.value as typeof riscMode;
+                setRiscMode(m);
+                // se ha già la termopompa, il consumo elettrico è più alto: alzo il
+                // default del campo bolletta (senza sommare a parte = niente doppio conteggio)
+                if (m === "gia" && i.kwhAnno <= kwhAnnoDefault) {
+                  set("kwhAnno", kwhAnnoDefault + RISCALDAMENTO.kWhElettriciDefault);
+                }
+              }}
+            >
+              <option value="no">Non rilevante / non so</option>
+              <option value="valuto">Sto valutando una termopompa</option>
+              <option value="fossile">Riscaldo a gasolio o gas</option>
+              <option value="gia">Ho già una termopompa</option>
+            </select>
+            {riscConta && (
+              <div style={{ marginTop: "0.8rem" }}>
+                <label style={label}>Spesa riscaldamento all&apos;anno (CHF)</label>
+                <input
+                  type="number"
+                  step="100"
+                  style={field}
+                  value={spesaRisc}
+                  onChange={(e) => setSpesaRisc(Number(e.target.value))}
+                />
+                <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>
+                  Quanto spendi oggi in legna/gasolio/gas per scaldare: è una spesa che oggi hai davvero. Con la termopompa a energia solare rientra nel canone.
+                </span>
+              </div>
+            )}
+            {riscMode === "gia" && (
+              <span style={{ display: "block", marginTop: "0.6rem", fontSize: "0.75rem", color: "#94a3b8", lineHeight: 1.6 }}>
+                Ho già alzato il consumo qui sopra perché la termopompa pesa in bolletta.
+                Correggi il campo <b>Elettricità (kWh/anno)</b> col tuo valore reale
+                (spesso 8&apos;000–12&apos;000 kWh): è già tutto lì, non va sommato a parte.
+              </span>
+            )}
+          </div>
         </div>
 
         {/* ---------------- RISULTATO ---------------- */}
@@ -185,6 +247,28 @@ export default function Calcolatore() {
             </div>
           )}
         </div>
+      </div>
+
+      {/* ---------------- NOTA EMS / INTELLIGENZA ARTIFICIALE ---------------- */}
+      <div
+        style={{
+          ...card,
+          marginTop: "1.2rem",
+          borderLeft: "4px solid var(--primary-color)",
+          background: "#f8fafc",
+          display: "flex",
+          gap: "0.9rem",
+          alignItems: "flex-start",
+        }}
+      >
+        <span style={{ fontSize: "1.6rem", lineHeight: 1 }}>🧠</span>
+        <p style={{ margin: 0, color: "var(--text-secondary)", fontSize: "0.92rem", lineHeight: 1.7 }}>
+          <b style={{ color: "var(--text-primary)" }}>La tua casa non è solo alimentata: è gestita.</b>{" "}
+          Con Home Assistant e un&apos;intelligenza artificiale locale, AlpFree ottimizza ogni giorno
+          produzione solare, accumulo e consumi — imparando dalle tue abitudini, dalle tariffe e dal meteo.
+          Il sistema non invecchia: <b style={{ color: "var(--text-primary)" }}>migliora nel tempo, in autonomia</b>,
+          per farti sfruttare al massimo ogni kilowattora che produci.
+        </p>
       </div>
 
       {/* ---------------- COME ABBIAMO CALCOLATO ---------------- */}

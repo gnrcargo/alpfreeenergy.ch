@@ -36,6 +36,14 @@ export const CONTRACTING = {
 
 export const kwhAnnoDefault = 5000;
 
+// --- Riscaldamento / termopompa (lato cliente, non sensibile) ----------------
+// Il PREZZO d'installazione resta in catalog.internal.ts. Qui solo i numeri
+// che servono a stimare il canone dal punto di vista del cliente.
+export const RISCALDAMENTO = {
+  spesaFossileDefaultChf: 3000, // CHF/anno tipici in gasolio/gas per scaldare una casa (default, modificabile)
+  kWhElettriciDefault: 5000, // kWh/anno elettrici aggiunti da una termopompa (fabbisogno termico / COP)
+};
+
 // --- Contatti (pubblici) -----------------------------------------------------
 export const CONTATTI = {
   telefono: "078 657 10 66",

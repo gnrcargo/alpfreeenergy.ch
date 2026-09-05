@@ -83,6 +83,8 @@ export type OffertaInput = {
   batteriaPrezzoChf: number;
   wallbox: boolean;
   wallboxPrezzoChf: number;
+  termopompa: boolean; // true = nuova installazione (va a costo)
+  termopompaPrezzoChf: number;
   automazione: boolean;
   automazionePrezzoChf: number;
   // parametri economici (modificabili)
@@ -120,6 +122,9 @@ export function buildOffer(o: OffertaInput, canoneAnnuo?: number): OffertaOutput
   }
   if (o.wallbox) {
     voci.push({ descrizione: "Wallbox ricarica EV (11 kW)", quantita: "1 pz", totale: o.wallboxPrezzoChf });
+  }
+  if (o.termopompa) {
+    voci.push({ descrizione: "Termopompa aria-acqua (installata)", quantita: "1 set", totale: o.termopompaPrezzoChf });
   }
   if (o.automazione) {
     voci.push({ descrizione: "Automazione + hardware EMS", quantita: "1 set", totale: o.automazionePrezzoChf });

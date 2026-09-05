@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { computeContracting, chf } from "@/lib/calc";
 import { buildOffer, type OffertaInput } from "@/lib/calc.internal";
-import { MOBILITY, ENERGY, kwhAnnoDefault } from "@/lib/catalog";
+import { MOBILITY, ENERGY, CONTRACTING, kwhAnnoDefault } from "@/lib/catalog";
 import {
   MODULI_FV,
   BATTERIA,
   WALLBOX,
+  TERMOPOMPA,
   AUTOMAZIONE,
   TIER_EMS,
   SUSSIDI,
@@ -35,6 +36,8 @@ export default function Offerta() {
     batteriaPrezzoChf: BATTERIA.tagli[0].prezzoChf,
     wallbox: true,
     wallboxPrezzoChf: WALLBOX.prezzoChf,
+    termopompa: false,
+    termopompaPrezzoChf: TERMOPOMPA.prezzoChf,
     automazione: true,
     automazionePrezzoChf: AUTOMAZIONE.prezzoChf,
     sussidioChf: SUSSIDI.pronovoBase + SUSSIDI.pronovoPerKwp * 8,
@@ -43,12 +46,23 @@ export default function Offerta() {
   const [tierEms, setTierEms] = useState(TIER_EMS[1].id);
   const [contracting, setContracting] = useState(true);
 
+  // termopompa: "no" | "nuova" (a costo, con arbitraggio fossile) | "gia" (già installata)
+  const [tpMode, setTpMode] = useState<"no" | "nuova" | "gia">("no");
+  const [spesaRisc, setSpesaRisc] = useState(TERMOPOMPA.spesaFossileOggiChf);
+  const [kwhRisc, setKwhRisc] = useState(TERMOPOMPA.kWhElettriciAnno);
+
+  // leva margine: sconto sul canone (%). Più basso = canone più alto = più margine.
+  const [scontoPct, setScontoPct] = useState(Math.round(CONTRACTING.scontoCanone * 100));
+
   // situazione cliente per stimare canone/margine contracting
   const [kmAnno, setKmAnno] = useState(MOBILITY.kmAnnoDefault);
   const [kwhAnno, setKwhAnno] = useState(kwhAnnoDefault);
 
   const set = <K extends keyof OffertaInput>(k: K, v: OffertaInput[K]) => setO((p) => ({ ...p, [k]: v }));
 
+  // solo la termopompa NUOVA aggiunge arbitraggio (sostituisce il fossile).
+  // Se il cliente la ha già, il consumo è di norma già nel suo kWh/anno.
+  const tpNuova = tpMode === "nuova";
   const cliente = computeContracting({
     kmAnno,
     situazioneAuto: "sto_valutando",
@@ -58,11 +72,14 @@ export default function Offerta() {
     tariffaCtKwh: ENERGY.tariffaCtKwh,
     tetto: "si",
     immobile: "primaria",
+    speseRiscaldamentoOggi: tpNuova ? spesaRisc : 0,
+    kWhRiscaldamento: tpNuova ? kwhRisc : 0,
+    scontoCanone: scontoPct / 100,
   });
   const canoneAnnuo = cliente.canoneProposto;
   const emsMensile = TIER_EMS.find((t) => t.id === tierEms)?.chfMese ?? 0;
 
-  const res = buildOffer(o, contracting ? canoneAnnuo : undefined);
+  const res = buildOffer({ ...o, termopompa: tpNuova }, contracting ? canoneAnnuo : undefined);
   const modulo = MODULI_FV.find((m) => m.id === o.moduloId) ?? MODULI_FV[0];
   const margineContracting = contracting ? canoneAnnuo - cliente.costoResiduo : 0;
 
@@ -131,6 +148,42 @@ export default function Offerta() {
         </div>
 
         <div style={card}>
+          <div style={{ ...row, borderBottom: "none", marginBottom: tpMode !== "no" ? "0.6rem" : 0 }}>
+            <h3 style={{ fontSize: "1.05rem", margin: 0 }}>🔥 Termopompa</h3>
+            <span style={{ fontSize: "0.8rem", fontWeight: 700, color: tpMode !== "no" ? "var(--primary-color)" : "#94a3b8" }}>
+              {tpMode === "nuova" ? "● da installare" : tpMode === "gia" ? "● già presente" : "○ nessuna"}
+            </span>
+          </div>
+          <select style={field} value={tpMode} onChange={(e) => setTpMode(e.target.value as "no" | "nuova" | "gia")}>
+            <option value="no">Nessuna termopompa</option>
+            <option value="nuova">Sì — da installare (nuovo impianto)</option>
+            <option value="gia">Il cliente ce l&apos;ha già</option>
+          </select>
+          {tpMode === "nuova" && (
+            <div style={{ display: "flex", gap: "0.8rem", flexWrap: "wrap", marginTop: "0.8rem" }}>
+              <div style={{ flex: "1 1 120px" }}>
+                <label style={label}>Prezzo installata (CHF)</label>
+                <input type="number" step="500" style={field} value={o.termopompaPrezzoChf} onChange={(e) => set("termopompaPrezzoChf", Number(e.target.value))} />
+              </div>
+              <div style={{ flex: "1 1 120px" }}>
+                <label style={label}>Spesa riscaldamento oggi (CHF/anno)</label>
+                <input type="number" step="100" style={field} value={spesaRisc} onChange={(e) => setSpesaRisc(Number(e.target.value))} />
+                <span style={{ fontSize: "0.72rem", color: "#94a3b8" }}>Gasolio/gas sostituito → entra nel canone</span>
+              </div>
+              <div style={{ flex: "1 1 120px" }}>
+                <label style={label}>Consumo elettrico aggiunto (kWh/anno)</label>
+                <input type="number" step="100" style={field} value={kwhRisc} onChange={(e) => setKwhRisc(Number(e.target.value))} />
+              </div>
+            </div>
+          )}
+          {tpMode === "gia" && (
+            <p style={{ fontSize: "0.75rem", color: "#94a3b8", marginTop: "0.5rem", lineHeight: 1.5 }}>
+              Nessun costo d&apos;installazione. Il consumo della termopompa è di norma già nel kWh/anno del cliente: assicurati che il valore inserito sotto lo includa.
+            </p>
+          )}
+        </div>
+
+        <div style={card}>
           <div style={{ ...row, borderBottom: "none", marginBottom: o.automazione ? "0.6rem" : 0 }}>
             <h3 style={{ fontSize: "1.05rem", margin: 0 }}>🏠 Automazione + EMS</h3>
             {toggle(o.automazione, () => set("automazione", !o.automazione))}
@@ -159,6 +212,11 @@ export default function Offerta() {
               <label style={label}>Margine listino (%)</label>
               <input type="number" step="1" style={field} value={Math.round(o.margineListino * 100)} onChange={(e) => set("margineListino", Number(e.target.value) / 100)} />
               <span style={{ fontSize: "0.72rem", color: "#94a3b8" }}>Per stimare costo reale AlpFree</span>
+            </div>
+            <div style={{ flex: "1 1 140px" }}>
+              <label style={label}>Sconto canone (%)</label>
+              <input type="number" step="1" style={field} value={scontoPct} onChange={(e) => setScontoPct(Number(e.target.value))} />
+              <span style={{ fontSize: "0.72rem", color: "#94a3b8" }}>Più basso = canone più alto = più margine</span>
             </div>
           </div>
         </div>

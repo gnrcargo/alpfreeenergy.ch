@@ -23,6 +23,12 @@ export type ContractingInput = {
   tariffaCtKwh: number;
   tetto: Tetto;
   immobile: Immobile;
+  // --- Riscaldamento (opzionali: termopompa). Default 0 = nessun effetto,
+  //     così il calcolatore pubblico esistente non cambia. ---
+  speseRiscaldamentoOggi?: number; // CHF/anno che il cliente spende OGGI in gasolio/gas
+  kWhRiscaldamento?: number; // kWh/anno elettrici aggiunti dalla termopompa
+  // sconto sul canone (0.15 = 15% sotto la spesa attuale). Se assente, usa il default.
+  scontoCanone?: number;
 };
 
 export type ContractingOutput = {
@@ -44,17 +50,22 @@ export function computeContracting(i: ContractingInput): ContractingOutput {
     ? (i.kmAnno / 100) * i.lPer100km * i.prezzoCarburante
     : 0;
   const costoElettricoOggi = (i.kwhAnno * i.tariffaCtKwh) / 100;
-  const costoTotaleOggi = costoCarburanteOggi + costoElettricoOggi;
+  // spesa di riscaldamento fossile oggi (0 se non applicabile): la termopompa la
+  // sostituisce con elettricità solare → entra nella spesa che il canone cattura.
+  const speseRiscaldamentoOggi = i.speseRiscaldamentoOggi ?? 0;
+  const costoTotaleOggi = costoCarburanteOggi + costoElettricoOggi + speseRiscaldamentoOggi;
 
   const kWhPerMobilita = i.kmAnno * MOBILITY.evKwhPerKm;
-  const kWhTotaliNuovi = i.kwhAnno + kWhPerMobilita;
+  const kWhRiscaldamento = i.kWhRiscaldamento ?? 0;
+  const kWhTotaliNuovi = i.kwhAnno + kWhPerMobilita + kWhRiscaldamento;
 
   // costo residuo: quota NON coperta da autoconsumo + tassa di rete (mai a zero)
   const costoResiduo =
     (kWhTotaliNuovi * (1 - CONTRACTING.quotaAutoconsumo) * i.tariffaCtKwh) / 100 +
     ENERGY.tassaReteAnnua;
 
-  const canoneProposto = costoTotaleOggi * (1 - CONTRACTING.scontoCanone);
+  const sconto = i.scontoCanone ?? CONTRACTING.scontoCanone;
+  const canoneProposto = costoTotaleOggi * (1 - sconto);
   const risparmioCliente = costoTotaleOggi - canoneProposto;
 
   // avviso onesto: se è a benzina/diesel e non intende cambiare, la parte
